@@ -21,6 +21,7 @@ CREATE TABLE team(
 team_n VARCHAR(60),
 wins INT UNSIGNED,
 losses INT UNSIGNED,
+ties INT UNSIGNED,
 sportsmanship_rating INT UNSIGNED,
 PRIMARY KEY (team_n)
 );
@@ -59,8 +60,8 @@ CREATE TABLE results (
 team_one VARCHAR(60),
 team_two VARCHAR(60),
 date_of_game DATETIME,
-team_one_score VARCHAR(60),
-team_two_score VARCHAR(60),
+team_one_score INT,
+team_two_score INT,
 PRIMARY KEY (team_one, team_two, date_of_game),
 FOREIGN KEY (team_one, team_two, date_of_game) 
 	REFERENCES schedule(team_one, team_two, date_of_game)
@@ -95,20 +96,30 @@ FOREIGN KEY (leauge_ID) REFERENCES league(league_ID)
 );
 
 
--- populating tables
+-- Insert Statements
 -- User
-INSERT INTO user VALUES (54013911, 'Brenna Starkey', 0), (123456, 'Luke Mason', 1),
-(753293, 'Shawn Bowers', 0);
+INSERT INTO user VALUES (54013911, 'Brenna Starkey', 1), (123456, 'Luke Mason', 1),
+(753293, 'Shawn Bowers', 0), (324313, 'Grace Tompkins', 0), (6583928, 'Anna Kenyon', 0),
+(637562, 'Sophie Landers', 0), (233901, 'Mia Scelfo', 0), (727349, 'Kerynica Keyes', 0),
+(129402, 'Ben Hogan', 0), (324628, 'Bob Smith', 0), (392017, 'Alice Anders', 0),
+(345921, 'Dan Humphrey', 0), (952619, 'Andrew Ray');
 
 -- Team
-INSERT INTO team VALUES ('Team 1', 5, 4, 0) , ('Team 2', 0, 1, 0), ('Team 3', 6, 1, 0);
+INSERT INTO team VALUES ('Team 1', 4, 0, 1, 4) , ('Team 2', 1, 0, 3, 3),
+('Team 3', 6, 1, 0, 3), ('The Rockets', 5, 4, 2, 4), ('Laker Nation', 2, 2, 0, 5),
+('Sluggers', 1, 2, 0, 4), ('Lightning Bolts', 0, 4, 0, 3), ('Ballers', 3, 3, 0, 4),
+('Big Cats', 4, 4, 0, 3), ('Tiger Kings', 3, 2, 0, 2);
 
 -- Tournament
-INSERT INTO tournament VALUES ('Basketball Tournament', 20201020080000), ('Soccer Tournament', 20201020080000);
+INSERT INTO tournament VALUES ('Basketball Tournament', 20201020080000), ('Soccer Tournament', 20201020080000),
+('World Cup', 20201203073000), ('Softball Tournament', 20201108103000);
 
 -- Schedule
 INSERT INTO schedule VALUES ('Team 1', 'Team 3', 20201024073000 , 'McCarthy'),
-('Team 2', 'Team 1', 20201024080000, 'Rudolf Fitness Center');
+('Team 2', 'Team 1', 20201024080000, 'Rudolf Fitness Center'), ('The Rockets', 'Laker Nation',
+20201027091500, 'Rudolf Fitness Center'), ('Sluggers', 'Lightning Bolts', 20201113120000, 'Mulligan Field'),
+('Tiger Kings', 'Big Cats', 20201114123000, 'Mulligan Field'), ('Ballers', 'Team 1', 20201221083000, 'McCarthy'),
+('Team 1', 'Team 3', 20201113042500,'Rudolf Fitness Center');
 
 -- League
 INSERT INTO league VALUES (101, 'No Club Players', 10, 'Beginner', 'Coed', 'Basketball'),
@@ -116,19 +127,96 @@ INSERT INTO league VALUES (101, 'No Club Players', 10, 'Beginner', 'Coed', 'Bask
 15, 'Advanced', 'Female', 'Softball');
 
 -- Results
-INSERT INTO results VALUES ('Team 1', 'Team 3', 20201024073000, '24', '30'), ('Team 2', 'Team 1', 20201024080000, '45', '40');
+INSERT INTO results VALUES ('Team 1', 'Team 3', 20201024073000, 24, 30), ('Team 2', 'Team 1', 20201024080000, 45, 40),
+('The Rockets', 'Laker Nation', 20201027091500, 36, 38), ('Sluggers', 'Lightning Bolts', 20201113120000, 38, 38),
+('Tiger Kings', 'Big Cats', 20201114123000, 40, 41), ('Ballers', 'Team 1', 20201221083000, 23, 35),
+('Ballers', 'Team 1', 20201221083000, 34, 45), ('Team 1', 'Team 3', 20201113042500, 50, 51);
 
 -- User on Team
-INSERT INTO userOnTeam VALUES (54013911, 'Team 1', 1), (123456, 'Team 1', 0), (753293, 'Team 2', 1);
+INSERT INTO userOnTeam VALUES (54013911, 'Team 1', 1), (123456, 'Team 1', 0), (753293, 'Team 2', 1),
+(324313, 'Team 3', 0), (6583928, 'Team 3', 1), (637562, 'Team 3', 0), (233901, 'Team 3', 0),
+(727349, 'The Rockets', 1), (129402, 'The Rockets', 0), (324628, 'Laker Nation', 0),
+(392017, 'Laker Nation', 1), (345921, 'Lightning Bolts', 0), (952619, 'Ballers', 1);
 
 -- Team in Tournament
-INSERT INTO teamInTournament VALUES ('Team 1', 'Basketball Tournament'), ('Team 2', 'Basketball Tournament'), ('Team 3', 'Soccer Tournament');
+INSERT INTO teamInTournament VALUES ('Team 1', 'Basketball Tournament'), ('Team 2', 'Basketball Tournament'),
+('Team 3', 'Soccer Tournament');
 
 -- Team in League
 INSERT INTO teamInLeague VALUES ('Team 1', 101), ('Team 2', 101), ('Team 3', 103);
 
 
+-- Query Statements
+-- Get all users that are admin
+SELECT u.user_n, u.GU_ID
+FROM user u
+WHERE u.is_admin = "True";
 
+-- Get all teams above a specific win value
+SELECT t.team_n, t.wins, t.losses
+FROM team t
+WHERE t.wins > 4;
+
+-- Get all games that are in a certain date range
+SELECT s.team_one, s.team_two, s.date_of_game
+FROM schedule s
+WHERE s.date_of_game BETWEEN 20201001000000 AND 20201031235959;
+
+-- Get all leagues that are a certain gender
+SELECT l.league_ID, l.league_level, l.sport, l.gender
+FROM league l
+WHERE l.gender = "Female";
+
+-- Get all leagues that are a certain level
+SELECT l.league_ID, l.league_level, l.sport, l.gender
+FROM league l
+WHERE l.league_level = "Beginner";
+
+-- Get all names on a specific team
+SELECT u1.user_n, u2.team_n
+FROM user u1 JOIN userOnTeam u2 USING (GU_ID);
+
+-- Get all users that aren't on a team
+(SELECT u1.user_n, u1.GU_ID
+FROM user)
+EXCEPT
+(SELECT u1.user_n, u1.GU_ID
+FROM user u1 JOIN userOnTeam u2 USING (GU_ID));
+
+-- Get all the teams in a specific tournament
+SELECT t1.team_n, t1.tourney_n
+FROM teamInTournament t1
+WHERE t1.tourney_n = "Basketball Tournament";
+
+-- Get all the teams in a specific league
+SELECT t1.team_n, l1.league_n
+FROM teamInLeague t1 JOIN league l1 USING (league_ID)
+WHERE t1.league_ID = 101;
+
+-- Get all the wins and losses of all the teams in a league
+SELECT t1.team_n, t1.wins, t1.losses, t1.ties, l1.league_n
+FROM team t1 JOIN teamInLeague l1 USING (team_n)
+WHERE l1.leauge_ID = 101;
+
+-- Count all the games a specific team has played
+SELECT t1.team_n, COUNT(*)
+FROM team t1 JOIN schedule s1
+WHERE t1.team_n = s1.team_one OR t1.team_n = s1.team_two;
+
+-- Count all the times two specific teams have played each other
+SELECT t1.team_n, t2.team_n, COUNT(*)
+FROM schedule s1, team t1, team t2
+WHERE (t1.team_n = s1.team_one AND t2.team_n = s1.team_two) OR
+		(t1.team_n = s1.team_two AND t2.team_n = s1.team_one);
+
+-- Get all the rules for every league and put it into another table
+SELECT l1.league_ID, l1.rule
+FROM league l1;
+
+-- Get all sports that have a specific max-player minimum
+SELECT l1.league_ID, l1.sport
+FROM  league l1
+WHERE l1.max_players > 5;
 
 
 
