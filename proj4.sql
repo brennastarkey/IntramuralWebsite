@@ -4,6 +4,12 @@ File: proj4.sql
 Class: CPSC 321, Bowers
 Description: */
 
+/* Name: Brenna Starkey & Luke Mason
+Date: October 20, 2020
+File: proj4.sql
+Class: CPSC 321, Bowers
+Description: */
+
 SET sql_mode = STRICT_ALL_TABLES;
 
 DROP TABLE IF EXISTS results, schedule, userOnTeam,teamInLeague, teamInTournament, tournament, team, user, league;
@@ -102,7 +108,7 @@ INSERT INTO user VALUES (54013911, 'Brenna Starkey', 1), (123456, 'Luke Mason', 
 (753293, 'Shawn Bowers', 0), (324313, 'Grace Tompkins', 0), (6583928, 'Anna Kenyon', 0),
 (637562, 'Sophie Landers', 0), (233901, 'Mia Scelfo', 0), (727349, 'Kerynica Keyes', 0),
 (129402, 'Ben Hogan', 0), (324628, 'Bob Smith', 0), (392017, 'Alice Anders', 0),
-(345921, 'Dan Humphrey', 0), (952619, 'Andrew Ray');
+(345921, 'Dan Humphrey', 0), (952619, 'Andrew Ray', 0);
 
 -- Team
 INSERT INTO team VALUES ('Team 1', 4, 0, 1, 4) , ('Team 2', 1, 0, 3, 3),
@@ -118,7 +124,7 @@ INSERT INTO tournament VALUES ('Basketball Tournament', 20201020080000), ('Socce
 INSERT INTO schedule VALUES ('Team 1', 'Team 3', 20201024073000 , 'McCarthy'),
 ('Team 2', 'Team 1', 20201024080000, 'Rudolf Fitness Center'), ('The Rockets', 'Laker Nation',
 20201027091500, 'Rudolf Fitness Center'), ('Sluggers', 'Lightning Bolts', 20201113120000, 'Mulligan Field'),
-('Tiger Kings', 'Big Cats', 20201114123000, 'Mulligan Field'), ('Ballers', 'Team 1', 20201221083000, 'McCarthy'),
+('Tiger Kings', 'Big Cats', 20201114123000, 'Mulligan Field'), ('Ballers', 'Team 1', 20201222083000, 'McCarthy'),
 ('Team 1', 'Team 3', 20201113042500,'Rudolf Fitness Center');
 
 -- League
@@ -129,8 +135,7 @@ INSERT INTO league VALUES (101, 'No Club Players', 10, 'Beginner', 'Coed', 'Bask
 -- Results
 INSERT INTO results VALUES ('Team 1', 'Team 3', 20201024073000, 24, 30), ('Team 2', 'Team 1', 20201024080000, 45, 40),
 ('The Rockets', 'Laker Nation', 20201027091500, 36, 38), ('Sluggers', 'Lightning Bolts', 20201113120000, 38, 38),
-('Tiger Kings', 'Big Cats', 20201114123000, 40, 41), ('Ballers', 'Team 1', 20201221083000, 23, 35),
-('Ballers', 'Team 1', 20201221083000, 34, 45), ('Team 1', 'Team 3', 20201113042500, 50, 51);
+('Tiger Kings', 'Big Cats', 20201114123000, 40, 41), ('Ballers', 'Team 1', 20201222083000, 34, 45), ('Team 1', 'Team 3', 20201113042500, 50, 51);
 
 -- User on Team
 INSERT INTO userOnTeam VALUES (54013911, 'Team 1', 1), (123456, 'Team 1', 0), (753293, 'Team 2', 1),
