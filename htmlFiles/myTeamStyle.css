@@ -19,7 +19,15 @@
     grid-column-end: 3
 }
 
-.home_buttons {
+#back_button {
+    background-color: blue;
+    color: white;
+    transition-duration: 0.4s;
+    border: 4px solid blue;
+    padding: 15px 30px;
+}
+
+#add_player_button {
     background-color: blue;
     color: white;
     transition-duration: 0.4s;
@@ -29,39 +37,12 @@
     padding: 15px 30px;
 }
 
-.home_buttons:hover {
+#add_player_button:hover {
     background-color: white;
     color: blue;
 }
 
-.subheading {
-    color: red;
-    font-size: 30pt;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#results {
-    grid-row-start: 2;
-    grid-column-start: 2;
-    grid-column-end: 3;
-}
-
-#upcoming {
-    grid-row-start: 4;
-    grid-column-start: 2;
-    grid-column-end: 3;
-}
-
-#results-query {
-    grid-row-start: 3;
-    grid-column-start: 2;
-    grid-column-end: 3;
-}
-
-#upcoming-query {
-    grid-row-start: 5;
-    grid-column-start: 2;
-    grid-column-end: 3;
+#back_button:hover {
+    background-color: white;
+    color: blue;
 }
