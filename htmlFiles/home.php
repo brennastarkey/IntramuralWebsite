@@ -19,15 +19,15 @@
     <div id = "results-query">
         <?php
             // get credentials (put your ini file somewhere private
-            function parse_ini_file_when_disabled($passedFile)
+            function parse_ini_file_quotes_safe($f)
             {
-                $returnArray=$null;
+                $r=$null;
                 $sec=$null;
-                $file=@file($passedFile);
-                for ($i=0;$i<@count($file);$i++)
+                $f=@file($f);
+                for ($i=0;$i<@count($f);$i++)
                 {
                     $newsec=0;
-                    $w=@trim($file[$i]);
+                    $w=@trim($f[$i]);
                     if ($w)
                     {
                         if ((!$r) or ($sec))
@@ -42,10 +42,10 @@
                         }
                     }
                 }
-                return $returnArray;
+                return $r;
             }
 
-            $config = parse_ini_file_when_disabled("config.ini");
+            $config = parse_ini_file_quotes_safe("config.ini");
             $configArray = $config["mason_starkey_DB"];
             $server = $configArray["servername"];
             $username = $configArray["username"];
