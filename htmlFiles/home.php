@@ -18,7 +18,7 @@
     <h2 id = "results" class = "subheading">Results</h2>
     <div id = "results-query">
         <?php
-            // get credentials (put your ini file somewhere private
+            // function to parse ini file when disabled
             function parse_ini_file_quotes_safe($f)
             {
                 $r=$null;
@@ -45,14 +45,15 @@
                 return $r;
             }
 
+            // Get higher level key-value array to parse
             $config = parse_ini_file_quotes_safe("config.ini");
+            
+            // Get standard key-value array
             $configArray = $config["mason_starkey_DB"];
             $server = $configArray["servername"];
             $username = $configArray["username"];
             $password = $configArray["password"];
             $database = "mason_starkey_DB";
-
-            // change to check for git issue
         
             // connect
             $conn = mysqli_connect($server, $username, $password, $database);
