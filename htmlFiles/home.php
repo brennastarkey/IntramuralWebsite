@@ -51,6 +51,8 @@
             $username = $configArray["username"];
             $password = $configArray["password"];
             $database = "mason_starkey_DB";
+
+            // change to check for git issue
         
             // connect
             $conn = mysqli_connect($server, $username, $password, $database);
