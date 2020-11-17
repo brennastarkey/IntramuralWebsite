@@ -42,7 +42,7 @@
                         }
                     }
                 }
-                return $r;
+                return $returnArray;
             }
 
             $config = parse_ini_file_when_disabled("config.ini");
