@@ -19,10 +19,37 @@
     <div id = "results-query">
         <?php
             // get credentials (put your ini file somewhere private
-            $config = parse_ini_file("config.ini");
-            $server = $config["servername"];
-            $username = $config["username"];
-            $password = $config["password"];
+            function parse_ini_file_when_disabled($passedFile)
+            {
+                $returnArray=$null;
+                $sec=$null;
+                $file=@file($passedFile);
+                for ($i=0;$i<@count($file);$i++)
+                {
+                    $newsec=0;
+                    $w=@trim($file[$i]);
+                    if ($w)
+                    {
+                        if ((!$r) or ($sec))
+                        {
+                        if ((@substr($w,0,1)=="[") and (@substr($w,-1,1))=="]") {$sec=@substr($w,1,@strlen($w)-2);$newsec=1;}
+                        }
+                        if (!$newsec)
+                        {
+                            $w=@explode("=",$w);$k=@trim($w[0]);unset($w[0]); $v=@trim(@implode("=",$w));
+                            if ((@substr($v,0,1)=="\"") and (@substr($v,-1,1)=="\"")) {$v=@substr($v,1,@strlen($v)-2);}
+                            if ($sec) {$r[$sec][$k]=$v;} else {$r[$k]=$v;}
+                        }
+                    }
+                }
+                return $r;
+            }
+
+            $config = parse_ini_file_when_disabled("config.ini");
+            $configArray = $config["mason_starkey_DB"];
+            $server = $configArray["servername"];
+            $username = $configArray["username"];
+            $password = $configArray["password"];
             $database = "mason_starkey_DB";
         
             // connect
