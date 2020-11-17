@@ -1,0 +1,48 @@
+
+
+.grid-container {
+    display: grid;
+}
+
+.header {
+    font-size: 40pt;
+    color: blue;
+    outline-color: red;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-shadow: -1px 1px 2px red,
+				  1px 1px 2px red,
+				  1px -1px 0 red,
+                  -1px -1px 0 red; 
+    margin-left: auto;
+    margin-right: auto;
+    grid-column-start: 1;
+    grid-column-end: 3
+}
+
+#back_button {
+    background-color: blue;
+    color: white;
+    transition-duration: 0.4s;
+    border: 4px solid blue;
+    padding: 15px 30px;
+}
+
+#join_new_league_button {
+    background-color: blue;
+    color: white;
+    transition-duration: 0.4s;
+    border: 4px solid blue;
+    font-size: 20px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    padding: 15px 30px;
+}
+
+#join_new_league_button:hover {
+    background-color: white;
+    color: blue;
+}
+
+#back_button:hover {
+    background-color: white;
+    color: blue;
+}
