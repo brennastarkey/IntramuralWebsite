@@ -6,8 +6,4 @@ window.onload = function() {
     createAccountBtn.addEventListener("click", function() {
         document.location.href = "createAccount.php";
     })
-
-    function validationLogin() {
-        
-    }
 }
