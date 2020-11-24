@@ -35,41 +35,52 @@
             console.log("error"); 
         }
 
-        $teamQuery = "SELECT u.team_n" . 
+        $GU_ID =123456;
+        
+        $teamQuery = "SELECT u.team_n " . 
                      "FROM userOnTeam u " .
                      "WHERE u.GU_ID = ?;";
         // set up prepared statement
+        $stmt = $conn->stmt_init();
+        $stmt->prepare($teamQuery);
+        $stmt->bind_param("i", $GU_ID);
+        $stmt->execute();
+        $stmt->bind_result($team_n);
 
-        $teamResult = mysqli_query($conn, $teamQuery);
-
-        if (mysqli_num_rows($teamResult) > 0) {
-            $row = mysqli_fetch_assoc($teamResult);
-            echo "<h2 class = \"subheading\">" . $row["team_n"] . "</h2>";
+        //if (mysqli_num_rows($teamResult) > 0) {
+        if($stmt->fetch()){
+            
+            echo "<h2 class = \"subheading\">" . $team_n . "</h2>";
             echo "<div>";
             echo "<table class = \"team-table\">\n";
             echo "<tr>\n";
-            echo "<th>GUID</th>\n";
-            echo "<th>First Name</th>\n";
-            echo "<th>Last Name</th>\n";
+            echo "<th>Player Name</th>\n";
             echo "<th>Captain?</th>\n";
             echo "</tr>\n";
 
-            $query = "SELECT u.GU_ID, u.team_n, u.is_captain " . 
-                     "FROM userOnTeam u " . 
-                     "WHERE u.team_n = ?;";
+            $query = "SELECT ut.GU_ID, u.user_n, ut.is_captain " . 
+                     "FROM userOnTeam ut JOIN user u USING(GU_ID) " . 
+                     "WHERE ut.team_n = ?;";
             // set up prepared statement
-            $result = mysqli_query($conn, $query);
-            if (mysqli_num_rows($result) > 0) {
-                while($row = mysqli_fetch_assoc($result)) {
+            //result = mysqli_query($conn, $query);
+            $stmt = $conn->stmt_init();
+            $stmt->prepare($query);
+            $stmt->bind_param("s", $team_n);
+            $stmt->execute();
+            $stmt->bind_result($GU_ID, $user_n, $is_captain);
+
+            while($stmt->fetch()) {
+                //while($row = mysqli_fetch_assoc($result)) {
                     echo "<tr>\n";
-                    echo "<td>" . $row["GU_ID"] . "</td>" . "\n";
-                    echo "<td>" . $row["team_n"] . "</td>" . "\n";
-                    echo "<td>" . $row["is_captain"] . "</td>" . "\n";
+                    echo "<td>" . $user_n . "</td>" . "\n";
+                    echo "<td>" . $is_captain . "</td>" . "\n";
                     echo "</tr>\n";
-                }
+                //}
             }
             echo "</table>";
             echo "</div>";
+
+            $stmt->close();
         }
         
         else {
@@ -78,7 +89,7 @@
         
         mysqli_close($conn);
     ?>
-    <h2 class = "subheading">Team Brendan</h2>
+    
     <div>
     <form id = "add-player" action="myTeam.php" method="POST">
         <input class = "my-team-buttons" id = "add-player-btn" type="submit" value="Add Player">
