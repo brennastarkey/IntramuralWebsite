@@ -1,5 +1,7 @@
 
 
+
+
 .header {
     font-size: 40pt;
     color: rgb(6, 50, 110);
@@ -23,7 +25,7 @@
     transform: translate(-50%, -50%);
 }
 
-.login-btn-style {
+.create-btn-style {
     background-color: whitesmoke;
     color: lightsteelblue;
     transition-duration: 0.4s;
@@ -34,35 +36,24 @@
     text-align: center;
 }
 
-.login-btn-style:hover {
+.create-btn-style:hover {
     background-color: lightsteelblue;
     color: whitesmoke;
 }
 
-.login-labels {
+.ca-labels {
     color:rgb(200,16,46);
     font-size: 15pt;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     letter-spacing: 1px;
 }
 
-.login-background {
+.create-background {
+    position: relative;
     background-color: lightsteelblue;
     padding: 10px;
-    margin-top: 10px;
-    padding-left: 40px;
-    padding-right: 40px;
     box-shadow: 5px 5px 5px lightgray;
-}
-
-#login-btn {
-    margin-top: 0;
-    margin-left: 95px;
-}
-
-#create-account {
-    margin-top: 0;
-    margin-left: 50px;
+    margin-top: 140px;
 }
 
 input[type = text] {
