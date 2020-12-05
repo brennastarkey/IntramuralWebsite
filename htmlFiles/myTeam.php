@@ -21,6 +21,7 @@
     </ul>
     <h1 class = "header">My Teams</h1>
     <?php
+        session_start();
         $server = "cps-database.gonzaga.edu";
         $username = "lmason2";
         $password = "Gozagsxc17";
@@ -35,7 +36,7 @@
             console.log("error"); 
         }
 
-        $GU_ID =123456;
+        $GU_ID = $_SESSION["guid"];
         
         $teamQuery = "SELECT u.team_n " . 
                      "FROM userOnTeam u " .
@@ -70,12 +71,10 @@
             $stmt->bind_result($GU_ID, $user_n, $is_captain);
 
             while($stmt->fetch()) {
-                //while($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>\n";
-                    echo "<td>" . $user_n . "</td>" . "\n";
-                    echo "<td>" . $is_captain . "</td>" . "\n";
-                    echo "</tr>\n";
-                //}
+                echo "<tr>\n";
+                echo "<td>" . $user_n . "</td>" . "\n";
+                echo "<td>" . $is_captain . "</td>" . "\n";
+                echo "</tr>\n";
             }
             echo "</table>";
             echo "</div>";

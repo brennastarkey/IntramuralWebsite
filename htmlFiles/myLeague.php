@@ -21,51 +21,63 @@
         <li style="float:right"><a class="active" href = "#" id = "logout-link">Log Out</a></li>
     </ul>
     <h1 class = "header">My Leagues</h1>
-    <h2 class = "subheading">Fall 2020 Co-Ed Soccer League</h2>
-    <div>
-        <table class = "league-table">
-            <tr>
-                <th>Team Name</th>
-                <th>Wins</th>
-                <th>Losses</th>
-            </tr>
-            <tr>
-                <td>Team Brendan</td>
-                <td>11</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <td>Sun Devils</td>
-                <td>8</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <td>Zags</td>
-                <td>11</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <td>Jayhawks</td>
-                <td>0</td>
-                <td>11</td>
-            </tr>
-            <tr>
-                <td>Hoyas</td>
-                <td>7</td>
-                <td>4</td>
-            </tr>
-            <tr>
-                <td>Trojans</td>
-                <td>7</td>
-                <td>4</td>
-            </tr>
-            <tr>
-                <td>Cougars</td>
-                <td>2</td>
-                <td>9</td>
-            </tr>
-        </table>
-    </div>
+    <?php
+        session_start();
+        $server = "cps-database.gonzaga.edu";
+        $username = "lmason2";
+        $password = "Gozagsxc17";
+        $database = "lmason2_DB";
+
+        // connect
+        $conn = mysqli_connect($server, $username, $password, $database);
+
+        // check connection
+        if (!$conn) {
+            die('Error: ' . mysqli_connect_error());
+            console.log("error"); 
+        }
+
+        $GU_ID = $_SESSION["guid"];
+        
+        $teamQuery = "SELECT ut.team_n " . 
+                     "FROM userOnTeam ut JOIN user u USING(GU_ID) " . 
+                     "WHERE GU_ID = ?;";
+        
+        $stmt = $conn->stmt_init();
+        $stmt->prepare($teamQuery);
+        $stmt->bind_param("i", $GU_ID);
+        $stmt->execute();
+        $stmt->bind_result($team_n);
+
+        if($stmt->fetch()){
+            echo "<h2 class = \"subheading\">" . $team_n . "</h2>\n";
+            echo "<div>\n";
+            echo "<table class = \"league-table\">\n";
+            echo "<tr>\n";
+            echo "<th>Team Name</th>\n";
+            echo "<th>Wins</th>\n";
+            echo "<th>Losses</th>\n";
+            echo "</tr>\n";
+
+            $stmt->close();
+
+            // set up query
+
+            while($stmt->fetch()) {
+                // print data
+            }
+            echo "</table>";
+            echo "</div>";
+
+            $stmt->close();
+        }
+        
+        else {
+            echo "<p class = \"center-class\">No Team<p>\n";
+        }
+        
+        mysqli_close($conn);
+    ?>
     <div>
         <button class = "league-button-style" id = "join_new_league_button">Join New League</button>
         <button class = "league-button-style" id = "view_league_rules_button">View League Rules</button>

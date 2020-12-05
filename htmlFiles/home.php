@@ -19,10 +19,9 @@
         <li><a href = "#" id = "results-link">Results</a></li>
         <li style="float:right"><a class="active" href = "#" id = "logout-link">Log Out</a></li>
     </ul>
-    <h1 class = "header">Zag Intramurals</h1>
-    <h2 id = "results" class = "subheading">Results</h2>
-    <div id = "results-query">
     <?php
+        session_start();
+         
         $server = "cps-database.gonzaga.edu";
         $username = "lmason2";
         $password = "Gozagsxc17";
@@ -36,12 +35,40 @@
             die('Error: ' . mysqli_connect_error());
             console.log("error"); 
         }
+        if(isset($_POST['username'])) {
+            $_SESSION["guid"] = $_POST['username'];
+        }
+        $GU_ID = $_POST['username'];
+        $authentication = "SELECT u.user_n " .
+        "FROM user u " .
+        "WHERE u.GU_ID = ?";
+        $stmt = $conn->stmt_init();
+        $stmt->prepare($authentication);
+        $stmt->bind_param("i", $GU_ID);
+        $stmt->execute();
+        $stmt->bind_result($user_n);
+
+        if(!$stmt->fetch()) {
+            header("Location: http://barney.gonzaga.edu/~lmason2/htmlFiles/createAccount.php"); 
+            exit();
+        }
+
+        echo "<h1 class = \"header\">Zag Intramurals</h1>";
+        echo "<h2 id = \"results\" class = \"subheading\">Results</h2>";
+        echo "<div id = \"results-query\">";
+
+        $conn = mysqli_connect($server, $username, $password, $database);
+
+        // check connection
+        if (!$conn) {
+            die('Error: ' . mysqli_connect_error());
+            console.log("error"); 
+        }
 
         // the query
-        $query = "SELECT *
-                FROM results r;";
-
+        $query = "SELECT * FROM results";
         $result = mysqli_query($conn, $query);
+
         if (mysqli_num_rows($result) > 0) {
             echo "<table class = \"home-table\">\n";
             echo "<tr>\n";
@@ -65,29 +92,13 @@
         else {
             echo "<p class = \"center-class\">No Results<p>\n";
         }
-        
-        mysqli_close($conn);
-    ?>
-    <h2 id = "upcoming" class = "subheading">Upcoming</h2> 
-    <div id = "upcoming-query">
-    <?php
-        $server = "cps-database.gonzaga.edu";
-        $username = "lmason2";
-        $password = "Gozagsxc17";
-        $database = "lmason2_DB";
-
-        // connect
-        $conn = mysqli_connect($server, $username, $password, $database);
-
-        // check connection
-        if (!$conn) {
-            die('Error: ' . mysqli_connect_error());
-            console.log("error"); 
-        }
+        echo "</div>";
+        echo "<h2 id = \"upcoming\" class = \"subheading\">Upcoming</h2>"; 
+        echo "<div id = \"upcoming-query\">";
 
         // the query
         $query = "SELECT *
-                FROM schedule s;";
+        FROM schedule s;";
 
         $result = mysqli_query($conn, $query);
         if (mysqli_num_rows($result) > 0) {
@@ -111,10 +122,9 @@
         else {
             echo "<p class = \"center-class\">No Results<p>\n";
         }
-        
+        echo "</div>";
         mysqli_close($conn);
     ?>
-    </div>
 </body>
 
 </html>

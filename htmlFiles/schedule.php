@@ -20,53 +20,78 @@
         <li><a href = "#" id = "results-link">Results</a></li>
         <li style="float:right"><a class="active" href = "#" id = "logout-link">Log Out</a></li>
     </ul>
-    <h1 class = "header">Schedule</h1>
-    <div>
-        <table class = "schedule-table">
-            <tr>
-                <th>Team One</th>
-                <th>Team Two</th>
-                <th>Date</th>
-                <th>Location</th>
-            </tr>
-            <tr>
-                <td>Sun Devils</td>
-                <td>Trojans</td>
-                <td>8 August</td>
-                <td>Phoenix</td>
-            </tr>
-            <tr>
-                <td>Team Brendan</td>
-                <td>Team Noah</td>
-                <td>17 November</td>
-                <td>La Quinta</td>
-            </tr>
-            <tr>
-                <td>Team Baldwin</td>
-                <td>Team Augusta</td>
-                <td>20 November</td>
-                <td>McDonalds</td>
-            </tr>
-            <tr>
-                <td>Zags</td>
-                <td>Jayhawks</td>
-                <td>4 April</td>
-                <td>Indianapolis</td>
-            </tr>
-            <tr>
-                <td>Zags</td>
-                <td>Cardinal</td>
-                <td>14 April</td>
-                <td>Cobb Field</td>
-            </tr>
-            <tr>
-                <td>Zags</td>
-                <td>Huskies</td>
-                <td>3 June</td>
-                <td>Hayward Field</td>
-            </tr>
-        </table>
-    </div>
+    <?php
+        session_start();
+        $server = "cps-database.gonzaga.edu";
+        $username = "lmason2";
+        $password = "Gozagsxc17";
+        $database = "lmason2_DB";
+
+        // connect
+        $conn = mysqli_connect($server, $username, $password, $database);
+
+        // check connection
+        if (!$conn) {
+            die('Error: ' . mysqli_connect_error());
+            console.log("error"); 
+        }
+
+        $GU_ID = $_SESSION["guid"];
+        
+        $teamQuery = "SELECT ut.team_n " . 
+                     "FROM userOnTeam ut JOIN user u USING(GU_ID) " . 
+                     "WHERE GU_ID = ?;";
+        
+        $stmt = $conn->stmt_init();
+        $stmt->prepare($teamQuery);
+        $stmt->bind_param("i", $GU_ID);
+        $stmt->execute();
+        $stmt->bind_result($team_n);
+
+        if($stmt->fetch()){
+            echo "<h2 class = \"header\"> Schedule For: </h2>\n";
+            echo "<h2 class = \"subheading\">" . $team_n . "</h2>\n";
+            echo "<div>\n";
+            echo "<table class = \"schedule-table\">\n";
+            echo "<tr>\n";
+            echo "<th>Team One</th>\n";
+            echo "<th>Team Two</th>\n";
+            echo "<th>Date</th>\n";
+            echo "<th>Location</th>\n";
+            echo "</tr>\n";
+
+            $stmt->close();
+
+            $query = "SELECT  s.team_one, s.team_two, s.date_of_game, s.game_location " . 
+                     "FROM schedule s " . 
+                     "WHERE s.team_one = ? OR s.team_two = ?;";
+            // set up prepared statement
+            $stmt = $conn->stmt_init();
+            $stmt->prepare($query);
+            $stmt->bind_param("ss", $team_n, $team_n);
+            $stmt->execute();
+            $stmt->bind_result($team_one, $team_two, $date_of_game, $game_location);
+
+            while($stmt->fetch()) {
+                echo "<tr>\n";
+                echo "<td>" . $team_one . "</td>" . "\n";
+                echo "<td>" . $team_two . "</td>" . "\n";
+                echo "<td>" . $date_of_game . "</td>" . "\n";
+                echo "<td>" . $game_location . "</td>" . "\n";
+                echo "</tr>\n";
+            }
+            echo "</table>";
+            echo "</div>";
+
+            $stmt->close();
+        }
+        
+        else {
+            echo "<p class = \"center-class\">No Team<p>\n";
+        }
+        
+        mysqli_close($conn);
+    ?>
 </body>
 
 </html>

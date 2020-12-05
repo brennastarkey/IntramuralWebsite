@@ -45,6 +45,17 @@
         text-align: center;
 }
 
+.subheading {
+    color: rgb(200,16,46);
+    font-size: 30pt;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    margin: auto; 
+    width: 80%;
+    text-align: left;
+}
+
 ul {
     position: fixed;
     top: 0;
