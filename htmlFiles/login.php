@@ -20,6 +20,9 @@ session_start(); // Start new session
 ?>
 
 <body style = "background-color: whitesmoke;">
+    <form action = "admin.php">
+        <input class = "login-btn-style" type="submit" value="I'm an admin">
+    </form>
     <h1 class = "header">Gonzaga Intramurals</h1>
     <div class = "center login-background">
         <form action = "home.php" method="POST">
