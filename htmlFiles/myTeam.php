@@ -221,7 +221,7 @@ Page to let the user see their team
             echo "<div>";
             echo "<table class = \"team-table\">\n";
             echo "<tr>\n";
-            echo "<th>Player Name</th>\n";
+            echo "<th>Username</th>\n";
             echo "<th>Captain?</th>\n";
             echo "</tr>\n";
 
