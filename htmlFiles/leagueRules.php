@@ -1,6 +1,9 @@
-
-
-
+<!--
+Brenna Starkey & Luke Mason
+CPSC 321: Databases Final Project
+leagueRules.php
+Page to take the user when they click on league rules
+-->
 <html>
 
 <head>

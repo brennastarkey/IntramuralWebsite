@@ -1,4 +1,9 @@
-
+<!--
+Brenna Starkey & Luke Mason
+CPSC 321: Databases Final Project
+home.php
+Page to take the user to after login
+-->
 <html>
 
 <head>
@@ -20,56 +25,69 @@
         <li style="float:right"><a class="active" href = "#" id = "logout-link">Log Out</a></li>
     </ul>
     <?php
-        session_start();
+        session_start(); // Used to hold session varibale
          
+        // Server info
         $server = "cps-database.gonzaga.edu";
         $username = "lmason2";
         $password = "Gozagsxc17";
         $database = "lmason2_DB";
 
-        // connect
+        // Connect to database
         $conn = mysqli_connect($server, $username, $password, $database);
 
-        // check connection
+        // Check connection
         if (!$conn) {
             die('Error: ' . mysqli_connect_error());
             console.log("error"); 
         }
+        
+        // Check if the username variable has been set
         if(isset($_POST['username'])) {
-            $_SESSION["guid"] = $_POST['username'];
-        }
-        $GU_ID = $_POST['username'];
-        $authentication = "SELECT u.user_n " .
-        "FROM user u " .
-        "WHERE u.GU_ID = ?";
-        $stmt = $conn->stmt_init();
-        $stmt->prepare($authentication);
-        $stmt->bind_param("i", $GU_ID);
-        $stmt->execute();
-        $stmt->bind_result($user_n);
+            $_SESSION["guid"] = $_POST['username']; // Set session variable
+            $GU_ID = $_POST['username'];
 
-        if(!$stmt->fetch()) {
-            header("Location: http://barney.gonzaga.edu/~lmason2/htmlFiles/createAccount.php"); 
-            exit();
-        }
+            // Run query to see if user exists
+            $authentication = "SELECT u.user_n " .
+                              "FROM user u " .
+                              "WHERE u.GU_ID = ?";
 
+            // Run query
+            $stmt = $conn->stmt_init();
+            $stmt->prepare($authentication);
+            $stmt->bind_param("i", $GU_ID);
+            $stmt->execute();
+            $stmt->bind_result($user_n);
+
+            // Check if user exists
+            if(!$stmt->fetch()) {
+                // Redirect user to account creation
+                header("Location: http://barney.gonzaga.edu/~lmason2/htmlFiles/createAccount.php"); 
+                exit();
+            }
+        }
+        $GU_ID = $_SESSION['guid']; // Set variable from session
+
+        // Create headings
         echo "<h1 class = \"header\">Zag Intramurals</h1>";
         echo "<h2 id = \"results\" class = \"subheading\">Results</h2>";
         echo "<div id = \"results-query\">";
 
+        // Connect to database
         $conn = mysqli_connect($server, $username, $password, $database);
 
-        // check connection
+        // Check connection
         if (!$conn) {
             die('Error: ' . mysqli_connect_error());
             console.log("error"); 
         }
 
-        // the query
+        // Run query for results table
         $query = "SELECT * FROM results";
-        $result = mysqli_query($conn, $query);
+        $result = mysqli_query($conn, $query); // Bind results
 
         if (mysqli_num_rows($result) > 0) {
+            // Table for results
             echo "<table class = \"home-table\">\n";
             echo "<tr>\n";
             echo "<th>Team One</th>\n";
@@ -79,6 +97,7 @@
             echo "<th>Date-Time</th>\n";
             echo "</tr>\n";
             while($row = mysqli_fetch_assoc($result)) {
+                // Data to populate table
                 echo "<tr>\n";
                 echo "<td>" . $row["team_one"] . "</td>" . "\n";
                 echo "<td>" . $row["team_two"] . "</td>" . "\n";
@@ -90,18 +109,20 @@
             echo "</table>";
         }
         else {
+            // No results
             echo "<p class = \"center-class\">No Results<p>\n";
         }
         echo "</div>";
         echo "<h2 id = \"upcoming\" class = \"subheading\">Upcoming</h2>"; 
         echo "<div id = \"upcoming-query\">";
 
-        // the query
+        // Run query for upcoming games table
         $query = "SELECT *
         FROM schedule s;";
+        $result = mysqli_query($conn, $query); // Bind results
 
-        $result = mysqli_query($conn, $query);
         if (mysqli_num_rows($result) > 0) {
+            // Table for upcoming games
             echo "<table class = \"home-table\">\n";
             echo "<tr>\n";
             echo "<th>Team One</th>\n";
@@ -110,6 +131,7 @@
             echo "<th>Location</th>\n";
             echo "</tr>\n";
             while($row = mysqli_fetch_assoc($result)) {
+                // Data to populate table
                 echo "<tr>\n";
                 echo "<td>" . $row["team_one"] . "</td>" . "\n";
                 echo "<td>" . $row["team_two"] . "</td>" . "\n";
@@ -126,5 +148,4 @@
         mysqli_close($conn);
     ?>
 </body>
-
 </html>

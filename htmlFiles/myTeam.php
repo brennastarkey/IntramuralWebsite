@@ -1,4 +1,9 @@
-
+<!--
+Brenna Starkey & Luke Mason
+CPSC 321: Databases Final Project
+myTeam.php
+Page to let the user see their team
+-->
 <html>
 
 <head>
@@ -21,36 +26,197 @@
     </ul>
     <h1 class = "header">My Teams</h1>
     <?php
-        session_start();
+        session_start(); // Start session for session variable
+
+        // Server info
         $server = "cps-database.gonzaga.edu";
         $username = "lmason2";
         $password = "Gozagsxc17";
         $database = "lmason2_DB";
 
-        // connect
+        // Connect to database
         $conn = mysqli_connect($server, $username, $password, $database);
 
-        // check connection
+        // Check connection
         if (!$conn) {
             die('Error: ' . mysqli_connect_error());
             console.log("error"); 
         }
 
-        $GU_ID = $_SESSION["guid"];
+        $GU_ID = $_SESSION["guid"]; // Set local variable to session variable
+
+        // Check if player is added
+        if (isset($_POST['guidOfAdded'])) {
+            $userToAdd = $_POST['guidOfAdded'];
+            unset($_POST['guidOfAdded']);
+
+            //Connect to database
+            $conn = mysqli_connect($server, $username, $password, $database);
+
+            // Check connection
+            if (!$conn) {
+                die('Error: ' . mysqli_connect_error());
+                console.log("error"); 
+            }
+
+            // Write query to see if user is on a team
+            $playerQuery = "SELECT u.GU_ID " .
+                           "FROM userOnTeam u " . 
+                           "WHERE u.GU_ID = ?;";
+
+            // Run query
+            $stmt = $conn->stmt_init();
+            $stmt->prepare($playerQuery);
+            $stmt->bind_param("i", $userToAdd);
+            $stmt->execute();
+            $stmt->bind_result($playerToAdd);
+
+            if($stmt->fetch()) {
+                // User is on another team
+                echo '<script>alert("That user is already on a team")</script>';
+            }
+            else {
+                $stmt->close();
+
+                // Reset connection
+                $conn = mysqli_connect($server, $username, $password, $database);
+
+                // Write query to get team name of logged in user 
+                $teamQuery = "SELECT u.team_n " . 
+                             "FROM userOnTeam u " .
+                             "WHERE u.GU_ID = ?;";
+
+                // Run query
+                $stmt = $conn->stmt_init();
+                $stmt->prepare($teamQuery);
+                $stmt->bind_param("i", $GU_ID);
+                $stmt->execute();
+                $stmt->bind_result($team_n);
+
+                if ($stmt->fetch()) {
+                    // There is a team to add the user to
+
+                    // Reset connection
+                    $conn = mysqli_connect($server, $username, $password, $database);
+    
+                    // Write query to insert player on team
+                    $insert = "INSERT INTO userOnTeam (GU_ID, team_n, is_captain) VALUES (" . $userToAdd . ", \"" . $team_n . "\", 0);";
+                    if ($conn->query($insert) === TRUE) {
+                        // Player successfully inserted and reload teams
+                        header("Location: http://barney.gonzaga.edu/~lmason2/htmlFiles/myTeam.php");
+                    }
+                    else {
+                        // Error adding the user
+                        echo '<script>alert("Error adding user")</script>';
+                    }
+                    
+                }
+                else {
+                    echo '<script>alert("You are not on a team...")</script>';
+                }
+            }
+        }
+
+        // Create new team
+        if (isset($_POST['c_team_n'])) {
+            // User wants to create a new team
+            $teamToAdd = $_POST['c_team_n'];
+            unset($_POST['c_team_n']);
+
+            // Connect to database
+            $conn = mysqli_connect($server, $username, $password, $database);
+
+            // Check connection
+            if (!$conn) {
+                die('Error: ' . mysqli_connect_error());
+                console.log("error"); 
+            }
+
+            // Write query to check if the user is on a team already
+            $playerQuery = "SELECT u.GU_ID " .
+                           "FROM userOnTeam u " . 
+                           "WHERE u.GU_ID = ?;";
+
+            // Run query
+            $stmt = $conn->stmt_init();
+            $stmt->prepare($playerQuery);
+            $stmt->bind_param("i", $GU_ID);
+            $stmt->execute();
+            $stmt->bind_result($playerToAdd);
+
+            if($stmt->fetch()) {
+                // User is already on a team
+                echo '<script>alert("You are already on a team")</script>';
+            }
+            else {
+                // User not on a team
+                $stmt->close();
+
+                // Reset connection
+                $conn = mysqli_connect($server, $username, $password, $database);
+
+                // Check connection
+                if (!$conn) {
+                    die('Error: ' . mysqli_connect_error());
+                    console.log("error"); 
+                }
+
+                // Write query to check if the team name exists
+                $teamQuery = "SELECT u.team_n " . 
+                "FROM team u " .
+                "WHERE u.team_n = ?;";
+
+                // Run query
+                $stmt = $conn->stmt_init();
+                $stmt->prepare($teamQuery);
+                $stmt->bind_param("s", $teamToAdd);
+                $stmt->execute();
+                $stmt->bind_result($team_n);
+
+                if ($stmt->fetch()) {
+                    // Team name exists
+                    echo '<script>alert("That team name already exists")</script>';
+                }
+                else {
+                    // Reset connection
+                    $conn = mysqli_connect($server, $username, $password, $database);
+    
+                    // Write team insertion and player insertion
+                    $insertTeam = "INSERT INTO team (team_n, wins, losses, ties, sportsmanship_rating) VALUES (" . "\"" . $teamToAdd . "\", " . "0, " . "0, " . "0, " . "0" . ");";
+                    $insertPlayer = "INSERT INTO userOnTeam (GU_ID, team_n, is_captain) VALUES (" . $GU_ID . ", \"" . $teamToAdd . "\", 1);";
+                    if ($conn->query($insertTeam) === TRUE) {
+                        // Team inserted
+                        if ($conn->query($insertPlayer) === TRUE) {
+                            // Player inserted and reload page
+                            header("Location: http://barney.gonzaga.edu/~lmason2/htmlFiles/myTeam.php");
+                        }
+                        else {
+                            // Error inserting team
+                            echo '<script>alert("Error adding user to new team")</script>';
+                        }
+                    }
+                    else {
+                        // Error adding team
+                        echo '<script>alert("Error adding team")</script>';
+                    }
+                }
+            }
+        }
         
+        // Write query to get the team name of the signed in user
         $teamQuery = "SELECT u.team_n " . 
                      "FROM userOnTeam u " .
                      "WHERE u.GU_ID = ?;";
-        // set up prepared statement
+
+        // Run query
         $stmt = $conn->stmt_init();
         $stmt->prepare($teamQuery);
         $stmt->bind_param("i", $GU_ID);
         $stmt->execute();
         $stmt->bind_result($team_n);
 
-        //if (mysqli_num_rows($teamResult) > 0) {
         if($stmt->fetch()){
-            
+            // There is a team the user is on
             echo "<h2 class = \"subheading\">" . $team_n . "</h2>";
             echo "<div>";
             echo "<table class = \"team-table\">\n";
@@ -59,11 +225,12 @@
             echo "<th>Captain?</th>\n";
             echo "</tr>\n";
 
+            // Write query to get players on the team
             $query = "SELECT ut.GU_ID, u.user_n, ut.is_captain " . 
                      "FROM userOnTeam ut JOIN user u USING(GU_ID) " . 
                      "WHERE ut.team_n = ?;";
-            // set up prepared statement
-            //result = mysqli_query($conn, $query);
+            
+            // Run the query
             $stmt = $conn->stmt_init();
             $stmt->prepare($query);
             $stmt->bind_param("s", $team_n);
@@ -71,6 +238,7 @@
             $stmt->bind_result($GU_ID, $user_n, $is_captain);
 
             while($stmt->fetch()) {
+                // Populate the table
                 echo "<tr>\n";
                 echo "<td>" . $user_n . "</td>" . "\n";
                 echo "<td>" . $is_captain . "</td>" . "\n";
@@ -81,18 +249,17 @@
 
             $stmt->close();
         }
-        
         else {
+            // The user is not on a team
             echo "<p class = \"center-class\">No Team<p>\n";
         }
-        
         mysqli_close($conn);
     ?>
     
     <div>
     <form id = "add-player" action="myTeam.php" method="POST">
         <input class = "my-team-buttons" id = "add-player-btn" type="submit" value="Add Player">
-        <input type="text" name="guid" id="guid" placeholder = "GUID">  
+        <input type="text" name="guidOfAdded" id="guid" placeholder = "GUID">  
     </form>  
     <form id = "join-team" action="myTeam.php" method="POST">
         <input class = "my-team-buttons" id = "join-team-btn" type="submit" value="Join Team">
@@ -102,6 +269,9 @@
         <input class = "my-team-buttons" id = "create-team-btn" type="submit" value="Create Team">
         <input type="text" name="c_team_n" id="c_team-n" placeholder = "Team Name"> 
     </form>  
+    <form id = "leave-team" action="myTeam.php" method="POST">
+        <input class = "my-team-buttons" id = "leave-team-btn" type="submit" value="Leave Team">
+        <input type="text" name="leave_team_guid" id="leave_team-n" placeholder = "Your GUID"> 
+    </form>  
 </body>
-
 </html>

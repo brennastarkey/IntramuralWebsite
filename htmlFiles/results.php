@@ -1,5 +1,9 @@
-
-
+<!--
+Brenna Starkey & Luke Mason
+CPSC 321: Databases Final Project
+results.php
+Page to let the user see their team's results
+-->
 <html>
 
 <head>
@@ -23,26 +27,30 @@
     <h1 class = "header">Results</h1>
     <?php
         session_start();
+
+        // Server info
         $server = "cps-database.gonzaga.edu";
         $username = "lmason2";
         $password = "Gozagsxc17";
         $database = "lmason2_DB";
 
-        // connect
+        // Connect to database
         $conn = mysqli_connect($server, $username, $password, $database);
 
-        // check connection
+        // Check connection
         if (!$conn) {
             die('Error: ' . mysqli_connect_error());
             console.log("error"); 
         }
 
-        $GU_ID = $_SESSION["guid"];
+        $GU_ID = $_SESSION["guid"]; // Set local variable to session variable
         
+        // Write query to get the team the user is on
         $teamQuery = "SELECT ut.team_n " . 
                      "FROM userOnTeam ut JOIN user u USING(GU_ID) " . 
                      "WHERE GU_ID = ?;";
         
+        // Run the query
         $stmt = $conn->stmt_init();
         $stmt->prepare($teamQuery);
         $stmt->bind_param("i", $GU_ID);
@@ -50,6 +58,7 @@
         $stmt->bind_result($team_n);
 
         if($stmt->fetch()){
+            // User is on a team
             echo "<h2 class = \"subheading\">" . $team_n . " Results:</h2>\n";
             echo "<div>\n";
             echo "<table class = \"results-table\">\n";
@@ -63,10 +72,12 @@
 
             $stmt->close();
 
+            // Write the query to get the results of the team
             $query = "SELECT r.team_one, r.team_two, r.date_of_game, r.team_one_score, r.team_two_score " .
                      "FROM results r " .
                      "WHERE r.team_one = ? OR r.team_two = ?;";
-            // set up prepared statement
+            
+            // Run the query
             $stmt = $conn->stmt_init();
             $stmt->prepare($query);
             $stmt->bind_param("ss", $team_n, $team_n);
@@ -74,6 +85,7 @@
             $stmt->bind_result($team_one, $team_two, $date_of_game, $team_one_score, $team_two_score);
 
             while($stmt->fetch()) {
+                // Populate table
                 echo "<tr>\n";
                 echo "<td>" . $team_one . "</td>" . "\n";
                 echo "<td>" . $team_two . "</td>" . "\n";
@@ -87,13 +99,11 @@
 
             $stmt->close();
         }
-        
         else {
+            // User does not have a team
             echo "<p class = \"center-class\">No Team<p>\n";
         }
-        
         mysqli_close($conn);
     ?>
 </body>
-
 </html>

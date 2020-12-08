@@ -1,5 +1,9 @@
-
-
+<!--
+Brenna Starkey & Luke Mason
+CPSC 321: Databases Final Project
+login.php
+Page to start the user at a login screen
+-->
 <html>
 
 <head>
@@ -11,8 +15,8 @@
 <script src = "loginJScript.js"></script>
 
 <?php
-session_destroy();
-session_start();
+session_destroy(); // End previous session
+session_start(); // Start new session
 ?>
 
 <body style = "background-color: whitesmoke;">
@@ -20,13 +24,11 @@ session_start();
     <div class = "center login-background">
         <form action = "home.php" method="POST">
             <p>
-                <label class = "login-labels" for="username">Username:</label>
+                <label class = "login-labels" for="username">GUID:</label>
                 <input type="text" name="username" id="username">
             </p>
-
             <input class = "login-btn-style center-buttons" id = "login-btn" type="submit" value="Login">
         </form>  
     </div>
 </body>
-
 </html>

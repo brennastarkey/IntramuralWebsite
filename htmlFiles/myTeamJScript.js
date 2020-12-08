@@ -17,8 +17,4 @@ window.onload = function() {
     createLink.href = "tournament.php";
     logoutLink.href = "login.php";
     resultsLink.href = "results.php";
-
-    createTeamButton.addEventListener("click", function() {
-        document.location.href = "createTeam.php";
-    })
 }
