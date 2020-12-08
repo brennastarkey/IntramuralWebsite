@@ -1,4 +1,9 @@
-
+/*
+Brenna Starkey & Luke Mason
+CPSC 321: Databases Final Project
+tournamentJScript.js
+Javascript file for tournament.php
+*/
 
 window.onload = function() {
     var homeLink = document.getElementById("home-link");

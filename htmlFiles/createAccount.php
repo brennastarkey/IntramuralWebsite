@@ -12,8 +12,6 @@ Page to create an account to put into the database
     <link rel="stylesheet" href="createAccountStyle.css">
 </head>
 
-<script src = "createAccountJScript.js"></script>
-
 <body style = "background-color: whitesmoke;">
     <?php
         // Function to check if the GUID entered is a repeat GUID

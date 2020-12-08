@@ -1,4 +1,9 @@
-
+/*
+Brenna Starkey & Luke Mason
+CPSC 321: Databases Final Project
+leagueRulesJScript.js
+Javascript file for leagueRules.php
+*/
 
 window.onload = function() {
     var homeLink = document.getElementById("home-link");

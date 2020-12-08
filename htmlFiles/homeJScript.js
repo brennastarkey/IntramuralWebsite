@@ -1,4 +1,9 @@
-
+/*
+Brenna Starkey & Luke Mason
+CPSC 321: Databases Final Project
+homeJScript.js
+Javascript file for homeJScript.js
+*/
 
 window.onload = function() {
     var homeLink = document.getElementById("home-link");

@@ -1,4 +1,9 @@
-
+/*
+Brenna Starkey & Luke Mason
+CPSC 321: Databases Final Project
+myTeamJScript.js
+Javascript file for myTeamJScript.php
+*/
 
 window.onload = function() {
     var homeLink = document.getElementById("home-link");
@@ -8,7 +13,6 @@ window.onload = function() {
     var createLink = document.getElementById("tournament-link");
     var logoutLink = document.getElementById("logout-link");
     var resultsLink = document.getElementById("results-link");
-    var createTeamButton = document.getElementById("create-team-button");
 
     homeLink.href = "home.php";
     myTeamLink.href = "myTeam.php";
