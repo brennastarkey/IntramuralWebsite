@@ -112,8 +112,8 @@ INSERT INTO team VALUES ('Team 1', 4, 0, 1, 4) , ('Team 2', 1, 0, 3, 3),
 ('Big Cats', 4, 4, 0, 3), ('Tiger Kings', 3, 2, 0, 2);
 
 -- Tournament
-INSERT INTO tournament VALUES ('Basketball Tournament', 20201020080000), ('Soccer Tournament', 20201020080000),
-('World Cup', 20201203073000), ('Softball Tournament', 20201108103000);
+INSERT INTO tournament VALUES ('Volleyball Tournament', 20201208100000), ('Basketball Tournament', 20201020080000), ('Baseball Tournament', 20201020080000),
+('Soccer Tournament', 20201203073000), ('Softball Tournament', 20201108103000);
 
 -- Schedule
 INSERT INTO schedule VALUES ('Team 1', 'Team 3', 20201024073000 , 'McCarthy'),

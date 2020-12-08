@@ -120,7 +120,7 @@ Page to let the user see their league
             $stmt->close();
 
             // Write query to get the user's league
-            $leagueQuery = "SELECT t.wins, t.losses, tl.team_n, l.gender, l.sport, l.league_level " . 
+            $leagueQuery = "SELECT l.league_ID, l.gender, l.sport, l.league_level " . 
                             "FROM team t JOIN teamInLeague tl USING (team_n) JOIN league l USING (league_ID) " . 
                             "WHERE t.team_n = ?;";
 
@@ -129,7 +129,7 @@ Page to let the user see their league
             $leagueStmt->prepare($leagueQuery);
             $leagueStmt->bind_param("s", $team_n);
             $leagueStmt->execute();
-            $leagueStmt->bind_result($win, $loss, $team, $gender, $sport, $league);
+            $leagueStmt->bind_result($league_ID, $gender, $sport, $league);
 
             if ($leagueStmt->fetch()) {
                 // User has a league
@@ -147,12 +147,12 @@ Page to let the user see their league
                 // Write query to get the team in the league
                 $teamQuery = "SELECT t.wins, t.losses, tl.team_n " . 
                             "FROM team t JOIN teamInLeague tl USING (team_n) JOIN league l USING (league_ID) " . 
-                            "WHERE t.team_n = ?;";
+                            "WHERE l.league_ID = ?;";
 
                 // Run the query
                 $teamStmt = $conn->stmt_init();
                 $teamStmt->prepare($teamQuery);
-                $teamStmt->bind_param("s", $team_n);
+                $teamStmt->bind_param("i", $league_ID);
                 $teamStmt->execute();
                 $teamStmt->bind_result($win, $loss, $team);
 
