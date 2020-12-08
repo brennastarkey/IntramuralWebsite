@@ -117,6 +117,75 @@ Page to let the user see their team
             }
         }
 
+        // Join team
+        if (isset($_POST['team_n'])) {
+            $joinTeam = $_POST['team_n'];
+            unset($_POST['c_team_n']);
+
+            // Connect to database
+            $conn = mysqli_connect($server, $username, $password, $database);
+
+            // Check connection
+            if (!$conn) {
+                die('Error: ' . mysqli_connect_error());
+                console.log("error"); 
+            }
+
+            // Write query to check if player is on team
+            $playerQuery = "SELECT u.GU_ID " .
+                           "FROM userOnTeam u " . 
+                           "WHERE u.GU_ID = ?;";
+            
+            // Run the query
+            $stmt = $conn->stmt_init();
+            $stmt->prepare($playerQuery);
+            $stmt->bind_param("i", $GU_ID);
+            $stmt->execute();
+            $stmt->bind_result($playerToAdd);
+               
+            if($stmt->fetch()) {
+                echo '<script>alert("You are already on a team")</script>';
+            }
+            else{
+                $stmt->close();
+                $conn = mysqli_connect($server, $username, $password, $database);
+
+                if (!$conn) {
+                    die('Error: ' . mysqli_connect_error());
+                    console.log("error"); 
+                }
+
+                // Write query to get team to join
+                $teamQuery = "SELECT u.team_n " . 
+                            "FROM team u " .
+                            "WHERE u.team_n = ?;";
+
+                // Run the query
+                $stmt = $conn->stmt_init();
+                $stmt->prepare($teamQuery);
+                $stmt->bind_param("s", $joinTeam);
+                $stmt->execute();
+                $stmt->bind_result($team_n);
+
+                if ($stmt->fetch()) {
+                    // Insert user into that team
+                    $conn = mysqli_connect($server, $username, $password, $database);
+                    $insertPlayer =  "INSERT INTO userOnTeam (GU_ID, team_n, is_captain) VALUES (" . $GU_ID . ", \"" . $joinTeam . "\", 0);";
+                    if ($conn->query($insertPlayer) === TRUE){
+                        header("Location: http://barney.gonzaga.edu/~lmason2/htmlFiles/myTeam.php");
+                    }
+                    else{
+                        echo '<script>alert("Error adding player to team")</script>';
+                    }
+                }
+                else {
+                    // Team name does not exist
+                    echo '<script>alert("Team does not exist")</script>';
+                }
+            }
+
+        }
+
         // Create new team
         if (isset($_POST['c_team_n'])) {
             // User wants to create a new team
@@ -201,6 +270,45 @@ Page to let the user see their team
                     }
                 }
             }
+        }
+
+        // leaving team
+        if (isset($_POST['leave_team_guid'])) {
+            $userToDrop = $_POST['leave_team_guid'];
+            unset($_POST['leave_team_guid']);
+            $conn = mysqli_connect($server, $username, $password, $database);
+
+            // check connection
+            if (!$conn) {
+                die('Error: ' . mysqli_connect_error());
+                console.log("error"); 
+            }
+
+            // check if they are on team
+            $playerQuery = "SELECT u.GU_ID " .
+                           "FROM userOnTeam u " . 
+                           "WHERE u.GU_ID = ?;";
+            $stmt = $conn->stmt_init();
+            $stmt->prepare($playerQuery);
+            $stmt->bind_param("i", $userToDrop);
+            $stmt->execute();
+            $stmt->bind_result($dropUser);
+
+            // delete
+            if($stmt->fetch()) {
+                $conn = mysqli_connect($server, $username, $password, $database);
+                $deleteQuery = "DELETE FROM userOnTeam WHERE GU_ID = " . $dropUser ."";
+                if($conn->query($deleteQuery) === TRUE){
+                    header("Location: http://barney.gonzaga.edu/~lmason2/htmlFiles/myTeam.php"); 
+                }
+                else{
+                    echo '<script>alert("Error removing user")</script>';
+                }
+            }
+            else {
+                echo '<script>alert("You are not on a team")</script>';
+            }
+
         }
         
         // Write query to get the team name of the signed in user

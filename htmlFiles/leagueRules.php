@@ -25,7 +25,6 @@ Page to take the user when they click on league rules
         <li style="float:right"><a class="active" href = "#" id = "logout-link">Log Out</a></li>
     </ul>
     <h1 class = "header">League Rules</h1>
-    <h2 class = "subheading">Fall 2020 Co-Ed Soccer League</h2>
     <div id = "rules">
         <ol class = "center-class">
             <li>Must have at least 3 of each gender on team.</li><br>
