@@ -24,6 +24,7 @@ Page to let the user see their league
         <li><a href = "#" id = "results-link">Results</a></li>
         <li style="float:right"><a class="active" href = "#" id = "logout-link">Log Out</a></li>
     </ul>
+    <h2 class = "header"> My Leagues </h2>
     
     <?php
         session_start(); // Start the session
@@ -132,7 +133,6 @@ Page to let the user see their league
 
             if ($leagueStmt->fetch()) {
                 // User has a league
-                echo "<h2 class = \"header\"> My Leagues </h2>\n";
                 echo "<h2 class = \"subheading\">" . $league . " " . $gender . " " . $sport . "</h2>\n";
                 echo "<div>\n";
                 echo "<table class = \"league-table\">\n";
