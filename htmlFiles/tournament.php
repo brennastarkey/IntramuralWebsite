@@ -102,7 +102,7 @@ Page to let the user see available tournaments
             while ($stmt->fetch()) {
                 echo "<h3 class = \"currentTournaments\">" . $tourney . "</h3>\n";
             }
-            echo "<h3 class = \"currentTournaments\">Contact 480-529-9373 to be removed.</h3>\n";
+            echo "<h3 class = \"currentTournaments\">Contact lmason2@zagmail.gonzaga.edu to be removed.</h3>\n";
         }
         else {
             // User is not registered
