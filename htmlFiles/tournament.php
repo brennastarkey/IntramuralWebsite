@@ -27,6 +27,7 @@ Page to let the user see available tournaments
     <h1 class = "header">Tournaments</h1>
     <?php
         session_start(); // Start session for session variable
+        $GU_ID = $_SESSION["guid"]; // Set local variable to session variable
 
         // Server info
         $server = "cps-database.gonzaga.edu";
@@ -42,8 +43,6 @@ Page to let the user see available tournaments
             die('Error: ' . mysqli_connect_error());
             console.log("error"); 
         }
-
-        $GU_ID = $_SESSION["guid"]; // Set local variable to session variable
 
         // Check if user wants to join tourney
         if(isset($_POST['tourney_name'])) {
@@ -83,6 +82,31 @@ Page to let the user see available tournaments
                 // User is not on a team
                 echo '<script>alert("You are not on a team.")</script>';
             }  
+        }
+
+        // Query to get user's current tournaments
+        $curTournamentsQuery = "SELECT t.tourney_n " . 
+                               "FROM userOnTeam u JOIN teamInTournament t USING(team_n) " .
+                               "WHERE u.GU_ID = ?;";
+           
+        // Run the query
+        $stmt = $conn->stmt_init();
+        $stmt->prepare($curTournamentsQuery);
+        $stmt->bind_param("i", $GU_ID);
+        $stmt->execute();
+        $stmt->bind_result($tourney);
+
+        echo "<h2 class = \"subheading\">Tournaments You Are Registered For: </h2>\n";
+        if($stmt->fetch()) {
+            // User is registered for tournaments
+            while ($stmt->fetch()) {
+                echo "<h3 class = \"currentTournaments\">" . $tourney . "</h3>\n";
+            }
+            echo "<h3 class = \"currentTournaments\">Contact 480-529-9373 to be removed.</h3>\n";
+        }
+        else {
+            // User is not registered
+            echo "<h3 class = \"currentTournaments\">No current registrations</h3>\n";
         }
 
         // Write query to view tournaments

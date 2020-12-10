@@ -130,14 +130,17 @@ Page to take the user to after login
             echo "<th>Date</th>\n";
             echo "<th>Location</th>\n";
             echo "</tr>\n";
+            $today = date("Y-m-d H:i:s");
             while($row = mysqli_fetch_assoc($result)) {
-                // Data to populate table
-                echo "<tr>\n";
-                echo "<td>" . $row["team_one"] . "</td>" . "\n";
-                echo "<td>" . $row["team_two"] . "</td>" . "\n";
-                echo "<td>" . $row["date_of_game"] . "</td>" . "\n";
-                echo "<td>" . $row["game_location"] . "</td>" . "\n";
-                echo "</tr>\n";
+                if ($today < $row["date_of_game"]) {
+                    // Data to populate table
+                    echo "<tr>\n";
+                    echo "<td>" . $row["team_one"] . "</td>" . "\n";
+                    echo "<td>" . $row["team_two"] . "</td>" . "\n";
+                    echo "<td>" . $row["date_of_game"] . "</td>" . "\n";
+                    echo "<td>" . $row["game_location"] . "</td>" . "\n";
+                    echo "</tr>\n";
+                }
             }
             echo "</table>";
         }

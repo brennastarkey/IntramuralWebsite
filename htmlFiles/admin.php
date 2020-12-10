@@ -1,4 +1,9 @@
-
+<!--
+Brenna Starkey & Luke Mason
+CPSC 321: Databases Final Project
+admin.php
+Page to let the admin log in
+-->
 
 <html>
 
@@ -12,6 +17,7 @@
     <?php
         if(isset($_POST["wrongPassword"])) {
             echo '<script>alert("Wrong password.")</script>';
+            // Redirected and password is incorrect
         }
     ?>
     <h1 class = "header">Admin Login</h1>

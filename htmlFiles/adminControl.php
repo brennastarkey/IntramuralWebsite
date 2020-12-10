@@ -1,6 +1,9 @@
-
-
-
+<!--
+Brenna Starkey & Luke Mason
+CPSC 321: Databases Final Project
+adminControl.php
+Page to let the admin add appropriate values to database
+-->
 <html>
 
 <head>
@@ -83,7 +86,7 @@
 
 
          // Adding Result
-         if(isset($_POST['r_team_one'])) {
+        if(isset($_POST['r_team_one'])) {
             if (isset($_POST['r_team_two']) && isset($_POST['r_date_of_game']) 
              && isset($_POST['r_team_one_score']) && isset($_POST['r_team_two_score'])) {
                 $server = "cps-database.gonzaga.edu";
@@ -172,6 +175,33 @@
             }
         }
 
+        // Adding scheduled game
+        if(isset($_POST["tourney_name"])){
+            if(isset($_POST["tourney_date"])){
+                $server = "cps-database.gonzaga.edu";
+                $username = "lmason2";
+                $password = "Gozagsxc17";
+                $database = "lmason2_DB";
+                
+                $conn = mysqli_connect($server, $username, $password, $database);
+                // check connection
+                if (!$conn) {
+                    die('Error: ' . mysqli_connect_error());
+                    console.log("error"); 
+                }
+
+                $insertTourney = "INSERT INTO tournament (tourney_n, tourney_date) VALUES (\"" . $_POST["tourney_name"] . "\", " . $_POST["tourney_date"]. ");";
+                if ($conn->query($insertTourney) === TRUE) {
+                    echo '<script>alert("Success adding tournament")</script>';
+                }
+                else {
+                    echo '<script>alert("Error adding tournament")</script>';
+                }
+            }
+            else{
+                echo '<script>alert("Please fill in all schedule fields.")</script>';
+            }
+        }
     ?>
     <h1 class = "header">Database Controls</h1>
     <h2 class = "subheading">League Controls</h2>
@@ -219,6 +249,17 @@
                 <input type="text" name="r_team_one_score">
             <label class = "login-labels" for="r_team_two_score">Team Two Score: </label>
                 <input type="text" name="r_team_two_score">
+            <input class = "login-btn-style center-buttons" id = "results-btn" type="submit" value="Submit">
+        </form>  
+    </div>
+
+    <h2 class = "subheading">Tournament Controls</h2>
+    <div>
+        <form action = "adminControl.php" method="POST">
+            <label class = "login-labels" for="tourney_name">Tournament Name: </label>
+                <input type="text" name="tourney_name">
+            <label class = "login-labels" for="tourney_date">Tournament Date: </label>
+                <input type="text" name="tourney_date">
             <input class = "login-btn-style center-buttons" id = "results-btn" type="submit" value="Submit">
         </form>  
     </div>
