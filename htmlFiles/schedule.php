@@ -74,7 +74,8 @@ Page to let the user see their team's schedule
             // Write the query for the schedule of the team
             $query = "SELECT  s.team_one, s.team_two, s.date_of_game, s.game_location " . 
                      "FROM schedule s " . 
-                     "WHERE s.team_one = ? OR s.team_two = ?;";
+                     "WHERE s.team_one = ? OR s.team_two = ? " .
+                     "ORDER BY s.date_of_game; ";
             
             // Run the query
             $stmt = $conn->stmt_init();

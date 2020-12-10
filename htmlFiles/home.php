@@ -83,7 +83,9 @@ Page to take the user to after login
         }
 
         // Run query for results table
-        $query = "SELECT * FROM results";
+        $query = "SELECT * " .
+                "FROM results;"; 
+                //"ORDER BY r.date_of_game;";
         $result = mysqli_query($conn, $query); // Bind results
 
         if (mysqli_num_rows($result) > 0) {
@@ -117,8 +119,9 @@ Page to take the user to after login
         echo "<div id = \"upcoming-query\">";
 
         // Run query for upcoming games table
-        $query = "SELECT *
-        FROM schedule s;";
+        $query = "SELECT * " .
+                "FROM schedule s " . 
+                "ORDER BY s.date_of_game;";
         $result = mysqli_query($conn, $query); // Bind results
 
         if (mysqli_num_rows($result) > 0) {
