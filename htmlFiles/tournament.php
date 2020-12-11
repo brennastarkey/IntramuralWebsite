@@ -99,6 +99,7 @@ Page to let the user see available tournaments
         echo "<h2 class = \"subheading\">Tournaments You Are Registered For: </h2>\n";
         if($stmt->fetch()) {
             // User is registered for tournaments
+            echo "<h3 class = \"currentTournaments\">" . $tourney . "</h3>\n";
             while ($stmt->fetch()) {
                 echo "<h3 class = \"currentTournaments\">" . $tourney . "</h3>\n";
             }
