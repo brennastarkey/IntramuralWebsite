@@ -359,7 +359,7 @@ Page to let the user see their team
         }
         else {
             // The user is not on a team
-            echo "<p class = \"center-class\">No Team<p>\n";
+            echo "<h2 class = \"subheading\">You are not on a team</h2>\n";
         }
         mysqli_close($conn);
     ?>
